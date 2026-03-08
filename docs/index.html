@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kafka Ordering Demos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1><span>Kafka</span> Ordering Demos</h1>
+    <nav>
+      <a href="#levels">Levels</a>
+      <a href="#quickstart">Quick Start</a>
+      <a href="https://github.com/chrislevn/kafka-demos">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="badge">Open-source educational demo</div>
+    <h1>Understand Kafka Ordering<br>in 3 Levels</h1>
+    <p>A progressive, hands-on demo that teaches you how Kafka handles message ordering — and how to get both speed and order in production systems.</p>
+    <a href="https://github.com/chrislevn/kafka-demos" class="btn">View on GitHub</a>
+  </div>
+
+  <h2>The Problem</h2>
+  <p>You're building an e-commerce system. Each order goes through a lifecycle:</p>
+  <pre><code>CREATED → PAID → SHIPPED → DELIVERED</code></pre>
+  <p>Processing these events out of order is catastrophic — you can't ship before payment, and you can't deliver before shipping. How does Kafka help you maintain this order at scale?</p>
+
+  <h2 id="levels">The Three Levels</h2>
+
+  <div class="levels">
+    <div class="level-card">
+      <div class="level-number" style="color: var(--green);">Level 1</div>
+      <h3>Single Partition — Guaranteed Order</h3>
+      <p>With one partition, Kafka is an append-only log. Messages come out in the exact order they go in. Simple and correct, but limited throughput.</p>
+      <span class="tag tag-green">Ordered</span>
+      <span class="tag tag-yellow">1 partition</span>
+      <span class="tag tag-yellow">1 thread</span>
+    </div>
+
+    <div class="level-card">
+      <div class="level-number" style="color: var(--red);">Level 2</div>
+      <h3>Multi-Partition + Threads — Speed, No Order</h3>
+      <p>We add 4 partitions and 4 producer threads. Throughput goes way up, but without a partition key, Kafka round-robins messages — and order breaks.</p>
+      <span class="tag tag-red">Unordered</span>
+      <span class="tag tag-cyan">4 partitions</span>
+      <span class="tag tag-cyan">4 threads</span>
+    </div>
+
+    <div class="level-card">
+      <div class="level-number" style="color: var(--accent);">Level 3</div>
+      <h3>Consistent Hashing — Speed AND Order</h3>
+      <p>We use <code>order_id</code> as the partition key. Kafka hashes the key to deterministically route all messages for the same order to the same partition.</p>
+      <span class="tag tag-green">Ordered per key</span>
+      <span class="tag tag-cyan">4 partitions</span>
+      <span class="tag tag-cyan">4 threads</span>
+    </div>
+  </div>
+
+  <h2>How Consistent Hashing Works</h2>
+  <div class="diagram">                ┌──────────────┐
+           ┌───►│ Partition 0  │───► Consumer 0  (ORD-002, ORD-006)
+           │    ├──────────────┤
+Producer ──┼───►│ Partition 1  │───► Consumer 1  (ORD-003, ORD-008)
+(key=      │    ├──────────────┤
+ order_id) ├───►│ Partition 2  │───► Consumer 2  (ORD-001, ORD-005)
+           │    ├──────────────┤
+           └───►│ Partition 3  │───► Consumer 3  (ORD-004, ORD-009)
+                └──────────────┘
+
+hash("ORD-001") % 4 = 2  ← always partition 2
+hash("ORD-002") % 4 = 0  ← always partition 0</div>
+
+  <h2 id="quickstart">Quick Start</h2>
+  <ol class="steps">
+    <li>
+      <strong>Start Kafka</strong>
+      <pre><code>docker compose up -d</code></pre>
+    </li>
+    <li>
+      <strong>Create Topics</strong>
+      <pre><code>./setup_topics.sh</code></pre>
+    </li>
+    <li>
+      <strong>Build the Project</strong>
+      <pre><code>mvn clean compile</code></pre>
+    </li>
+    <li>
+      <strong>Run a Demo (e.g., Level 3)</strong>
+      <pre><code># Terminal 1
+mvn exec:java -Dexec.mainClass="com.demo.kafka.level3.Producer"
+
+# Terminal 2
+mvn exec:java -Dexec.mainClass="com.demo.kafka.level3.Consumer"</code></pre>
+    </li>
+  </ol>
+
+  <h2>Key Takeaways</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Level</th>
+        <th>Partitions</th>
+        <th>Ordering</th>
+        <th>Throughput</th>
+        <th>Key Concept</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>1</td>
+        <td style="color: var(--green);">Total</td>
+        <td>Low</td>
+        <td>Single partition = total order</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>4</td>
+        <td style="color: var(--red);">Broken</td>
+        <td>High</td>
+        <td>No key = round-robin = chaos</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>4</td>
+        <td style="color: var(--green);">Per-key</td>
+        <td>High</td>
+        <td>Partition key = speed + order</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Tech Stack</h2>
+  <p>Java 17, Apache Kafka, Maven, Docker Compose, Kafka UI</p>
+</main>
+
+<footer>
+  <div class="container">
+    <span class="copyright">&copy; 2026 Kafka Ordering Demos</span>
+    <nav>
+      <a href="terms.html">Terms of Service</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="https://github.com/chrislevn/kafka-demos">GitHub</a>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Kafka Ordering Demos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1><a href="index.html" style="color: inherit;"><span>Kafka</span> Ordering Demos</a></h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="https://github.com/chrislevn/kafka-demos">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="legal">
+  <h1>Privacy Policy</h1>
+  <p class="updated">Last Updated: March 8, 2026</p>
+
+  <h2>1. Introduction</h2>
+  <p>This Privacy Policy describes how the Kafka Ordering Demos project ("the Software") handles information. We are committed to transparency about data practices associated with this project.</p>
+
+  <h2>2. Information We Do Not Collect</h2>
+  <p>The Software is a self-hosted educational demo that runs entirely on your local machine. <strong>We do not collect, store, transmit, or process any personal data.</strong> Specifically:</p>
+  <ul>
+    <li>We do not collect analytics or telemetry.</li>
+    <li>We do not use cookies or tracking technologies.</li>
+    <li>We do not collect IP addresses, usage data, or behavioral data.</li>
+    <li>We do not have any server-side components that receive your data.</li>
+  </ul>
+
+  <h2>3. Data Generated During Use</h2>
+  <p>When you run the Software locally, it generates simulated e-commerce order data (e.g., <code>ORD-001</code>, <code>CREATED</code>, <code>PAID</code>) within your local Apache Kafka instance. This data:</p>
+  <ul>
+    <li>Is entirely fictional and generated programmatically.</li>
+    <li>Exists only on your local machine within your Docker containers.</li>
+    <li>Is deleted when you run <code>docker compose down -v</code>.</li>
+    <li>Is never transmitted to any external service by the Software.</li>
+  </ul>
+
+  <h2>4. Third-Party Services</h2>
+  <p>The Software uses the following third-party Docker images that run locally on your machine:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Service</th>
+        <th>Image</th>
+        <th>Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Zookeeper</td>
+        <td><code>confluentinc/cp-zookeeper</code></td>
+        <td>Kafka coordination</td>
+      </tr>
+      <tr>
+        <td>Kafka</td>
+        <td><code>confluentinc/cp-kafka</code></td>
+        <td>Message broker</td>
+      </tr>
+      <tr>
+        <td>Kafka UI</td>
+        <td><code>provectuslabs/kafka-ui</code></td>
+        <td>Web-based dashboard</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>These images are pulled from Docker Hub. Docker Hub's own privacy policy applies to the act of downloading these images. Once running locally, these services do not transmit data externally.</p>
+
+  <h2>5. GitHub</h2>
+  <p>If you interact with this project on GitHub (e.g., starring, forking, opening issues, or submitting pull requests), GitHub's Privacy Statement governs the collection and use of your data by GitHub.</p>
+
+  <h2>6. Your Responsibilities</h2>
+  <p>If you modify the Software to process real or personal data, you are solely responsible for:</p>
+  <ul>
+    <li>Complying with applicable data protection laws (e.g., GDPR, CCPA).</li>
+    <li>Implementing appropriate security measures.</li>
+    <li>Providing notice and obtaining consent where required.</li>
+  </ul>
+
+  <h2>7. Children's Privacy</h2>
+  <p>The Software does not knowingly collect or solicit information from anyone under the age of 13.</p>
+
+  <h2>8. Changes to This Policy</h2>
+  <p>We may update this Privacy Policy from time to time. Changes will be reflected by updating the "Last Updated" date above.</p>
+
+  <h2>9. Contact</h2>
+  <p>For questions about this Privacy Policy, please open an issue on the <a href="https://github.com/chrislevn/kafka-demos">GitHub repository</a>.</p>
+</main>
+
+<footer>
+  <div class="container">
+    <span class="copyright">&copy; 2026 Kafka Ordering Demos</span>
+    <nav>
+      <a href="terms.html">Terms of Service</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="https://github.com/chrislevn/kafka-demos">GitHub</a>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
